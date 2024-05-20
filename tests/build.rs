@@ -21,10 +21,7 @@ fn watch_contract_changes(contract_index: usize) {
     println!("cargo:rerun-if-changed={}", CONTRACT_LIB_RS[contract_index]);
 }
 
-/// Build a contract given the crate's path which holds the contract and the proper build arguments.
-///
-/// # Arguments
-/// * `contract_index` - the contract's arguments index in the defined global constant variables.
+ 
 fn build_contract(contract_index: usize) {
     let output = Command::new("cargo")
         .current_dir(CONTRACT_ROOT[contract_index])
@@ -38,16 +35,7 @@ fn build_contract(contract_index: usize) {
     );
 }
 
-/// Move the compiled Wasm file to our own build folder ("wasm/`CONTRACT_NAME`.wasm") given:
-///
-/// 1 - the original compiled wasm file path.
-///
-/// 2 - the new file path.
-///
-/// 3 - the wasm file name.
-///
-/// # Arguments
-/// * `contract_index` - the contract's arguments index in the defined global constant variables.
+
 fn move_wasm_file(contract_index: usize) {
     let new_wasm_dir = env::current_dir().unwrap().join(NEW_WASM_DIR);
     let _ = fs::create_dir(&new_wasm_dir);

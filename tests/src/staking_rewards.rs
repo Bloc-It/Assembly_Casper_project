@@ -2,8 +2,6 @@ use casper_engine_test_support::{Code, Hash, SessionBuilder, TestContext, TestCo
 use casper_types::{AsymmetricType, CLTyped, ContractHash, Key, PublicKey, RuntimeArgs, U256, U512, account::AccountHash, bytesrepr::FromBytes, runtime_args};
 use crate::erc20::Token;
 
-// contains methods that can simulate a real-world deployment (storing the contract in the blockchain)
-// and transactions to invoke the methods in the contract.
 
 pub struct Sender(pub AccountHash);
 
@@ -71,7 +69,6 @@ impl StakingRewards {
             .unwrap_or_else(|_| panic!("{} has wrong type", "StakingRewards"))
     }
 
-    /// query a contract's dictionary's key.
     fn query_contract_dictionary<T: CLTyped + FromBytes>(
         &self,
         key: AccountHash,
@@ -90,7 +87,6 @@ impl StakingRewards {
         }
     }
 
-    /// call a contract's specific entry point.
     fn call(&mut self, sender: Sender, method: &str, args: RuntimeArgs) {
         let Sender(address) = sender;
         let code = Code::Hash(self.contract_hash(), method.to_string());
@@ -100,7 +96,7 @@ impl StakingRewards {
             .build();
         self.context.run(session);
     }
-    /* ✖✖✖✖✖✖✖✖✖✖✖ Public getters - Start ✖✖✖✖✖✖✖✖✖✖✖ */
+ 
     pub fn rewards_token(&self) -> ContractHash {
         self.query_contract_dictionary(
             self.ali,
@@ -244,9 +240,8 @@ impl StakingRewards {
             "nominated_owner".to_string()
         ).unwrap()
     }
-    /* ✖✖✖✖✖✖✖✖✖✖✖ Public getters - End ✖✖✖✖✖✖✖✖✖✖✖ */
+ 
 
-    /* ✖✖✖✖✖✖✖✖✖✖✖ External functions - Start ✖✖✖✖✖✖✖✖✖✖✖ */
     pub fn set_rewards_distribution(
         &mut self,
         rewards_distribution: Key,
@@ -393,6 +388,4 @@ impl StakingRewards {
             },
         )
     }
-    /* ✖✖✖✖✖✖✖✖✖✖✖ External functions - End ✖✖✖✖✖✖✖✖✖✖✖ */
-
 }

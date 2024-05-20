@@ -1,8 +1,6 @@
 use casper_engine_test_support::{Code, Hash, SessionBuilder, TestContext, TestContextBuilder};
 use casper_types::{AsymmetricType, CLTyped, Key, PublicKey, RuntimeArgs, U256, U512, account::AccountHash, bytesrepr::FromBytes, runtime_args};
 
-// contains methods that can simulate a real-world deployment (storing the contract in the blockchain)
-// and transactions to invoke the methods in the contract.
 
 pub mod token_cfg {
     use super::*;
@@ -73,7 +71,6 @@ impl Token {
             .unwrap_or_else(|_| panic!("{} has wrong type", self.name))
     }
 
-    /// query a contract's named key.
     fn query_contract<T: CLTyped + FromBytes>(&self, name: &str) -> Option<T> {
         match self
             .context
@@ -89,7 +86,6 @@ impl Token {
         }
     }
 
-    /// query a contract's dictionary's key.
     fn query_contract_dictionary<T: CLTyped + FromBytes>(
         &self,
         key: AccountHash,
@@ -108,7 +104,6 @@ impl Token {
         }
     }
 
-    /// call a contract's specific entry point.
     fn call(&mut self, sender: Sender, method: &str, args: RuntimeArgs) {
         let Sender(address) = sender;
         let code = Code::Hash(self.contract_hash(), method.to_string());
@@ -147,7 +142,6 @@ impl Token {
     }
 
     pub fn balance_of(&self, account: Key) -> U256 {
-        //let key = format!("balances_{}", account);
         self.query_contract_dictionary(
             self.ali,
             &self.context,
